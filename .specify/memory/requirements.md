@@ -43,24 +43,6 @@ Goal: let users drag-and-drop an Excel workbook into the web app and automatical
   - Isolate execution (sandboxing) to prevent arbitrary code execution and protect tenant data.
   - Encrypt stored files and restrict access to authorized users.
 
-- Non‑functional
-  - Low-latency single-run responses; scalable batch processing for pricing grids.
-  - Deterministic results under identical inputs and model versions.
-
-## Success criteria
-
-- The workbook is converted to a REST endpoint seemlessly without the user's explicit action or knowledge.
-- Single-run latency and grid throughput meet target SLAs.
-- Pricing grid enables efficient exploration of multi-input scenarios and exports results for downstream use.
-- Clear validation and error messages reduce failed conversions or runs.
-- Model versions and run logs provide reproducibility and auditability.
-
-## Q&A
-
-### Question 1
-
-I’m new to private credit. What are the common underwriting and pricing workflows? Are the input and output parameters typically standardized, or do they vary by deal and model?
-
 ### Answer 1
 
 Private credit underwriting follows a fairly repeatable flow, but each deal’s specifics (industry, structure, collateral) drive meaningful model variation.
@@ -89,6 +71,22 @@ Deal‑specific/variable inputs (drive model idiosyncrasies)
 
 Common/standardized outputs (what credit committees expect)
 
+- Leverage and coverage: Net Debt/EBITDA, Interest Coverage, Fixed‑Charge Coverage, DSCR, minimum liquidity.
+- Cash flow & headroom: free cash flow after interest/capex, covenant headroom by quarter, liquidity runway, breakeven analysis.
+- Returns & pricing: all‑in yield (cash and accrual), IRR to lender including OID/fees/call, fee economics, expected life.
+- Risk view: internal risk rating, probability of default / expected loss proxy, recovery sensitivity, collateral coverage/LTV.
+- Sensitivities: downside and severe downside outcomes, key driver tornado/sweep outputs.
+
+How standardized is it?
+
+- There is a strong “skeleton” of standardized inputs/outputs imposed by credit policy and IC templates, but each deal’s model varies in drivers, schedules, and sector/structure detail. Expect 60–70% shared anatomy and 30–40% deal‑specific logic.
+
+Implications for this app
+
+- Input detection: support a canonical schema (financials, capital structure, terms, covenants) but allow custom named ranges/labels for deal‑specific drivers.
+- Output mapping: normalize core metrics (leverage, coverage, yield, liquidity) for the API/UI while preserving additional model‑specific outputs.
+- Pricing grid axes: commonly swept across leverage, spread, base‑rate floors, OID, amortization, EBITDA haircuts, growth/margin sensitivities, and prepayment timing.
+- Validation: flag volatile Excel functions and ambiguous ranges; enforce units (%, bps, months, currency) to maintain determinism and precision.
 - Leverage and coverage: Net Debt/EBITDA, Interest Coverage, Fixed‑Charge Coverage, DSCR, minimum liquidity.
 - Cash flow & headroom: free cash flow after interest/capex, covenant headroom by quarter, liquidity runway, breakeven analysis.
 - Returns & pricing: all‑in yield (cash and accrual), IRR to lender including OID/fees/call, fee economics, expected life.
