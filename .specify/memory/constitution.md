@@ -42,6 +42,10 @@ This constitution defines the minimum set of rules and acceptance criteria for a
 - Prefer stubbing/simulating behavior in-memory to unblock flow; defer refactors until after UX validation.
 - Code quality gates focus on usability, accessibility, and correctness of the demo rather than polish or patterns.
 
+### VII. Use CSS variables for colors
+
+- Use variables for colors so the branding can be changed later.
+
 ## Project Constraints & Structure
 
 ### File/Folder Layout
