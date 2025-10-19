@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pricing Sheet - Excel Model Evaluator</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Excel Model Evaluator</h1>
+      <p class="subtitle">
+        Upload your pricing model and run scenarios instantly
+      </p>
+    </header>
+
+    <main>
+      <!-- Upload Section -->
+      <section class="card upload-section">
+        <h2>Upload Model</h2>
+        <div
+          class="upload-area"
+          id="uploadArea"
+          tabindex="0"
+          role="button"
+          aria-label="Upload Excel file"
+        >
+          <svg
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+          <p><strong>Drop your Excel file here</strong> or click to browse</p>
+          <p class="help-text">
+            Supports .xlsx files with formulas only (no VBA)
+          </p>
+          <input
+            type="file"
+            id="fileInput"
+            accept=".xlsx"
+            aria-label="Choose Excel file"
+          />
+        </div>
+        <div
+          id="fileInfo"
+          class="file-info"
+          role="status"
+          aria-live="polite"
+        ></div>
+      </section>
+
+      <!-- Single Run Section -->
+      <section class="card input-section" id="singleRunSection">
+        <h2>Single Run Evaluation</h2>
+        <form id="singleRunForm" class="input-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="loanAmount">Loan Amount ($M)</label>
+              <input
+                type="number"
+                id="loanAmount"
+                step="0.1"
+                value="50"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="baseRate">Base Rate (SOFR %)</label>
+              <input
+                type="number"
+                id="baseRate"
+                step="0.01"
+                value="5.25"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="spread">Spread (bps)</label>
+              <input type="number" id="spread" step="1" value="450" required />
+            </div>
+
+            <div class="form-group">
+              <label for="oid">OID (%)</label>
+              <input type="number" id="oid" step="0.1" value="2.0" required />
+            </div>
+
+            <div class="form-group">
+              <label for="tenor">Tenor (years)</label>
+              <input type="number" id="tenor" step="1" value="5" required />
+            </div>
+
+            <div class="form-group">
+              <label for="ebitda">LTM EBITDA ($M)</label>
+              <input type="number" id="ebitda" step="0.1" value="10" required />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Calculate</button>
+        </form>
+
+        <div
+          id="singleRunResults"
+          class="results-section"
+          role="region"
+          aria-live="polite"
+        >
+          <!-- Results populated by JS -->
+        </div>
+      </section>
+
+      <!-- Pricing Grid Section -->
+      <section class="card grid-section" id="gridSection">
+        <h2>Pricing Grid</h2>
+        <p class="section-description">
+          Define ranges for multiple inputs to evaluate output combinations
+        </p>
+
+        <form id="gridForm" class="grid-form">
+          <div class="grid-config">
+            <div class="form-group">
+              <label for="gridParam1">Parameter 1</label>
+              <select id="gridParam1" required>
+                <option value="spread">Spread (bps)</option>
+                <option value="oid">OID (%)</option>
+                <option value="baseRate">Base Rate (%)</option>
+                <option value="tenor">Tenor (years)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="gridParam1Min">Min</label>
+              <input
+                type="number"
+                id="gridParam1Min"
+                step="any"
+                value="400"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="gridParam1Max">Max</label>
+              <input
+                type="number"
+                id="gridParam1Max"
+                step="any"
+                value="500"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="gridParam1Step">Step</label>
+              <input
+                type="number"
+                id="gridParam1Step"
+                step="any"
+                value="25"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="grid-config">
+            <div class="form-group">
+              <label for="gridParam2">Parameter 2</label>
+              <select id="gridParam2" required>
+                <option value="oid">OID (%)</option>
+                <option value="spread">Spread (bps)</option>
+                <option value="baseRate">Base Rate (%)</option>
+                <option value="tenor">Tenor (years)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="gridParam2Min">Min</label>
+              <input
+                type="number"
+                id="gridParam2Min"
+                step="any"
+                value="1.0"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="gridParam2Max">Max</label>
+              <input
+                type="number"
+                id="gridParam2Max"
+                step="any"
+                value="3.0"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="gridParam2Step">Step</label>
+              <input
+                type="number"
+                id="gridParam2Step"
+                step="any"
+                value="0.5"
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Generate Grid</button>
+        </form>
+
+        <div id="gridControls" class="grid-controls" style="display: none">
+          <label for="metricSelector" class="metric-label"
+            >Display Metric:</label
+          >
+          <select id="metricSelector" class="metric-selector">
+            <option value="allInYield">All-In Yield (%)</option>
+            <option value="leverage">Leverage (x)</option>
+            <option value="interestCoverage">Interest Coverage (x)</option>
+            <option value="dscr">DSCR (x)</option>
+            <option value="effectiveRate">Effective Rate (%)</option>
+          </select>
+        </div>
+
+        <div
+          id="gridResults"
+          class="grid-results"
+          role="region"
+          aria-live="polite"
+        >
+          <!-- Grid results populated by JS -->
+        </div>
+
+        <div id="gridActions" class="grid-actions" style="display: none">
+          <button type="button" class="btn btn-secondary" id="exportCsvBtn">
+            Export CSV
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Hardcoded prototype data -->
+    <script id="modelData" type="application/json">
+      {
+        "modelName": "Standard Credit Model v2.3",
+        "version": "2.3.0",
+        "inputs": {
+          "loanAmount": 50,
+          "baseRate": 5.25,
+          "spread": 450,
+          "oid": 2.0,
+          "tenor": 5,
+          "ebitda": 10
+        },
+        "formulas": {
+          "comment": "Simplified hardcoded formulas for prototype",
+          "allInYield": "baseRate + (spread/100) + (oid/tenor)",
+          "leverage": "loanAmount / ebitda",
+          "interestCoverage": "ebitda / ((loanAmount * (baseRate + spread/100)) / 100)",
+          "effectiveRate": "(baseRate + spread/100) * (1 + oid/100)"
+        }
+      }
+    </script>
+
+    <script src="script.js"></script>
+  </body>
+</html>
