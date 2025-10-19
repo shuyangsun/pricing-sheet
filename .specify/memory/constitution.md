@@ -46,6 +46,10 @@ This constitution defines the minimum set of rules and acceptance criteria for a
 
 - Use variables for colors so the branding can be changed later.
 
+### VIII. Versioning
+
+- All front-end prototype pages must be versioned under different folders.
+
 ## Project Constraints & Structure
 
 ### File/Folder Layout
