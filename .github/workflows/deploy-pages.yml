@@ -37,6 +37,9 @@ jobs:
           # Copy all prototype versions to the deployment directory
           cp -r src/prototype/* _site/
 
+          # Add .nojekyll to prevent GitHub Pages from processing with Jekyll
+          touch _site/.nojekyll
+
           # Create an index page that lists all versions
           cat > _site/index.html << 'EOF'
           <!DOCTYPE html>
